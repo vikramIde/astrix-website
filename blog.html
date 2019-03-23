@@ -28,6 +28,7 @@
         </a>
         <div class="w-full md:w-auto text-center md:text-right">
           <!-- Login / Regsiter -->
+         
         </div>
       </div>
     </header>
@@ -38,7 +39,7 @@
 
       <!-- title -->
       <div class="text-center px-6 py-12 mb-6 bg-grey-lightest border-b">
-        
+        <img :src="blogImage" />
       </div>
       <!-- /title -->
 
@@ -67,18 +68,18 @@
               {{blog.description}}
             </p>
 
-            <div>
+            <div style="margin-top: 10px">
               <div class="flex flex-col mb-6 md:w-full">
                 <label class="mb-2 uppercase font-bold text-lg text-grey-darkest" for="password">Comments</label>
                 <textarea v-model="comment" class="border py-2 px-3 text-grey-darkest" type="password" name="password"
                   placeholder="Type your comment"></textarea>
               </div>
               <button @click="postComment(blog)"
-                class="block bg-teal hover:bg-teal-dark text-white uppercase text-lg  p-4 rounded" type="submit">Submit</button>
+                class="block bg-teal hover:bg-teal-dark text-white uppercase text-lg  p-2 rounded " type="submit">Submit</button>
               
-              <div class="bg-blue-lightest border-t border-b border-blue text-blue-dark px-4 py-3" role="alert" v-for="comment in blog.comments">
-                <p class="font-bold">Informational message</p>
-                <p class="text-sm">Some additional text to explain said message.</p>
+              <div style="margin-top: 10px" class="bg-blue-lightest border-t border-b border-blue text-blue-dark px-4 py-3" role="alert" v-for="comment in blog.comments">
+                <p class="font-bold">{{comment.content}}</p>
+                <p class="text-sm">{{comment.commented_at}}</p>
               </div>
 
             </div>
@@ -113,7 +114,24 @@
         title: "Welcome to title changer",
         heading: "Astrix blog",
         comment:"",
-        blogs:[]
+        baseUrl: Toolkit.rootDomain,
+        blogs:[],
+        options: [{
+          value: '1',
+          label: 'Lisure'
+        }, {
+          value: '2',
+          label: 'Technical'
+        }, {
+          value: '3',
+          label: 'Uncategorised'
+        }, {
+          value: '4',
+          label: 'Music'
+        }, {
+          value: '5',
+          label: 'Travel'
+        }],
       },
       methods: {
         changeTitle() {
@@ -141,6 +159,7 @@
           .then(res => {
             if (res) {
               if (res.data.data) {
+                this.blogs = []
                 this.blogs.push(res.data.data)
                 console.log(res.data.data)
               }
@@ -149,6 +168,16 @@
           .catch(err => {
             console.error(err)
           })
+        }
+      },
+      computed: {
+        // a computed getter
+        blogImage: function () {
+          // `this` points to the vm instance
+          if(this.blogs.length>0)
+            return this.baseUrl+'images/'+this.blogs[0].files[0].file_name
+          else
+            return ''
         }
       },
       created () {

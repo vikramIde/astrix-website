@@ -9,7 +9,7 @@
     this.ToolkitAuth = function () {
         if (typeof axios != "undefined") {
             this.API_URL = 'http://127.0.0.1:8000/api/'
-            this.rootDomain = ""
+            this.rootDomain = "http://127.0.0.1:8000/"
             this.TNC = false
             this.service = axios.create({
                 baseURL: this.API_URL,
